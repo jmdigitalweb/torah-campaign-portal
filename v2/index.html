@@ -120,12 +120,7 @@
 })();
 </script>
 <script>
-(function(){var a=document.getElementById('bgm'),b=document.getElementById('bgmBtn');if(!a||!b)return;a.volume=0.45;
-function paint(){b.textContent=a.paused?'🔇':'🔊';b.classList.toggle('muted',a.paused);}
-function start(){var p=a.play();if(p&&p.catch)p.catch(function(){});}
-start();['pointerdown','touchstart','keydown'].forEach(function(ev){window.addEventListener(ev,function(){if(a.paused)start();},{once:true,passive:true});});
-b.addEventListener('click',function(e){e.stopPropagation();if(a.paused)a.play();else a.pause();paint();});
-a.addEventListener('play',paint);a.addEventListener('pause',paint);paint();})();
+(function(){var a=document.getElementById("bgm"),b=document.getElementById("bgmBtn");if(!a||!b)return;a.volume=0.45;var want=true;function paint(){var off=a.paused||a.muted;b.textContent=off?"\uD83D\uDD07":"\uD83D\uDD0A";b.classList.toggle("muted",off);}var EV=["pointerdown","pointermove","mousemove","touchstart","keydown","scroll","wheel","click"];function go(){if(!want)return;a.muted=false;var p=a.play();if(p&&p.catch)p.catch(function(){});}function onGest(){if(want&&(a.muted||a.paused))go();if(!a.muted&&!a.paused){EV.forEach(function(ev){window.removeEventListener(ev,onGest);});}paint();}(function(){a.muted=false;var p=a.play();if(p&&p.catch){p.catch(function(){a.muted=true;var q=a.play();if(q&&q.catch)q.catch(function(){});paint();});}})();EV.forEach(function(ev){window.addEventListener(ev,onGest,{passive:true});});b.addEventListener("click",function(e){e.stopPropagation();if(a.paused||a.muted){want=true;go();}else{want=false;a.pause();}paint();});a.addEventListener("play",paint);a.addEventListener("pause",paint);a.addEventListener("volumechange",paint);paint();})();
 </script>
 </body>
 </html>
